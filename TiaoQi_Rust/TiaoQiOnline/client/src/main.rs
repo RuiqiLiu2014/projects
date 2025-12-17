@@ -4,7 +4,7 @@ use std::net::TcpStream;
 use std::sync::RwLock;
 use macroquad::prelude::*;
 use common::client_message::ClientMessage;
-use common::server_message::ServerMessage;
+use common::server_message::{Info, ServerMessage};
 use crate::board_view::BoardView;
 use crate::display_assets::*;
 
@@ -34,7 +34,8 @@ enum AppState {
     InGame {
         stream: TcpStream,
         reader: BufReader<TcpStream>,
-        board: Option<BoardView>
+        board: Option<BoardView>,
+        info: Option<Info>
     },
     GameOver {
         board: BoardView,
@@ -51,7 +52,6 @@ async fn main() {
         ip_string: String::new(),
         error_msg: None,
     };
-    let mut info = None;
 
     loop {
         let mut update_constants = false;
@@ -122,7 +122,7 @@ async fn main() {
                     Ok(stream) => {
                         stream.set_nonblocking(true).expect("Failed to set stream to non-blocking");
                         let reader = BufReader::new(stream.try_clone().unwrap());
-                        state = AppState::InGame { stream, reader, board: None };
+                        state = AppState::InGame { stream, reader, board: None, info: None };
                     }
                     Err(e) => {
                         state = AppState::EnterIp {
@@ -132,7 +132,7 @@ async fn main() {
                     }
                 }
             }
-            AppState::InGame { stream, reader, board } => {
+            AppState::InGame { stream, reader, board, info } => {
                 let mut buffer = String::new();
                 match reader.read_line(&mut buffer) {
                     Ok(0) => {
@@ -148,7 +148,7 @@ async fn main() {
                             let server_message: ServerMessage = serde_json::from_str(&buffer).unwrap();
                             match server_message {
                                 ServerMessage::Info(initial_info) => {
-                                    info = Some(initial_info);
+                                    *info = Some(initial_info);
                                 }
                                 ServerMessage::GameState(game_state) => {
                                     let current_board = board.get_or_insert_with(|| BoardView::new(game_state.rotation, game_state.ids.clone()));
@@ -196,7 +196,7 @@ async fn main() {
                         }
                     }
                 } else {
-                    if let Some(i) = info.clone() {
+                    if let Some(i) = info {
                         let font_size = 40.0;
                         if i.your_id == 0 {
                             display_text(&*format!("{} players connected", i.num_players), screen_width() / 2.0, screen_height() / 2.0 - 60.0, font_size, WHITE);
@@ -226,8 +226,8 @@ async fn main() {
                                 }
                             }
 
-                            if let Some(msg) = i.msg {
-                                display_text(&*msg, screen_width() / 2.0, screen_height() / 2.0 + 60.0, 25.0, RED);
+                            if let Some(msg) = &i.msg {
+                                display_text(msg, screen_width() / 2.0, screen_height() / 2.0 + 60.0, 25.0, RED);
                             }
                         } else {
                             display_text(&*format!("{} player{} connected", i.num_players, if i.num_players == 1 {""} else {"s"}), screen_width() / 2.0, screen_height() / 2.0 - 30.0, font_size, WHITE);

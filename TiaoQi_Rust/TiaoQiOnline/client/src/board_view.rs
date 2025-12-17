@@ -1,5 +1,5 @@
 use macroquad::prelude::*;
-use common::client_message::{ClientMessage};
+use common::client_message::ClientMessage;
 use crate::cell_view::CellView;
 use crate::display_assets::*;
 use common::piece_color::PieceColor;
