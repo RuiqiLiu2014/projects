@@ -7,14 +7,14 @@
 #include <string>
 #include <vector>
 
-#include "Movement.h"
+#include "Point.h"
 
 struct MoveCard
 {
     std::string name;
-    std::vector<Movement> movements;
+    std::vector<Point> movements;
 
-    MoveCard(std::string name, std::vector<Movement> movements);
+    MoveCard(std::string name, std::vector<Point> movements);
     [[nodiscard]] bool canMoveTo(int r, int c) const;
     static std::vector<MoveCard> ALL_CARDS;
 };

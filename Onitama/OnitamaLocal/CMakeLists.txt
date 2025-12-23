@@ -14,7 +14,7 @@ add_executable(OnitamaLocal main.cpp
         GameController.h
         Player.cpp
         Player.h
-        Movement.h
+        Point.h
         BoardView.cpp
         BoardView.h
         CardView.cpp

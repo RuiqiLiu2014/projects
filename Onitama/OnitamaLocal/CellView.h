@@ -12,8 +12,9 @@ class CellView
     int x, y;
 
 public:
-    CellView(const Cell& cell, int x, int y) : cell(cell), x(x), y(y) {}
+    CellView(const Cell& cell, const int x, const int y) : cell(cell), x(x), y(y) {}
     void draw() const;
+    bool isHovered() const;
 };
 
 

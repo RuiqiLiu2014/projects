@@ -5,6 +5,7 @@
 #ifndef ONITAMALOCAL_GAMECONTROLLER_H
 #define ONITAMALOCAL_GAMECONTROLLER_H
 #include <array>
+#include <optional>
 
 #include "Board.h"
 #include "MiddleCard.h"
@@ -17,9 +18,13 @@ class GameController
     Board board;
     std::array<Player, 2> players;
     MiddleCard middleCard;
+    int currentTurn;
+    std::optional<Point> selectedPieceLocation;
+    std::optional<Point> targetLocation;
 
     static std::vector<MoveCard> chooseCards(const std::vector<MoveCard>& allCards, int n);
     explicit GameController(const std::vector<MoveCard>& cards);
+    void handleClick();
 
 public:
     static GameController create(const std::vector<MoveCard>& allCards);

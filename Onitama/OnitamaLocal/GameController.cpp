@@ -13,7 +13,7 @@
 #include "DisplayConfig.h"
 #include "GameView.h"
 
-GameController::GameController(const std::vector<MoveCard>& cards) : players{Player(0), Player(1)}, middleCard(cards[4])
+GameController::GameController(const std::vector<MoveCard>& cards) : players{Player(0), Player(1)}, middleCard(cards[4]), currentTurn(0)
 {
     players[0].addCard(cards[0]);
     players[0].addCard(cards[1]);

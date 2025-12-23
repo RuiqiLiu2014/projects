@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <utility>
 
-MoveCard::MoveCard(std::string name, std::vector<Movement> movements)
+MoveCard::MoveCard(std::string name, std::vector<Point> movements)
 {
     this->name = std::move(name);
     this->movements = std::move(movements);
@@ -15,24 +15,24 @@ MoveCard::MoveCard(std::string name, std::vector<Movement> movements)
 
 bool MoveCard::canMoveTo(const int r, const int c) const
 {
-    return std::ranges::count(movements, Movement(r, c)) > 0;
+    return std::ranges::count(movements, Point(r, c)) > 0;
 }
 
 std::vector<MoveCard> MoveCard::ALL_CARDS = {
-    MoveCard("Cobra", {Movement(0, -1), Movement(1, 1), Movement(-1, 1)}),
-    MoveCard("Ox", {Movement(-1, 0), Movement(1, 0), Movement(0, 1)}),
-    MoveCard("Crab", {Movement(-1, 0), Movement(0, 2), Movement(0, -2)}),
-    MoveCard("Boar", {Movement(0, -1), Movement(0, 1), Movement(-1, 0)}),
-    MoveCard("Mantis", {Movement(-1, -1), Movement(-1, 1), Movement(1, 0)}),
-    MoveCard("Dragon", {Movement(-1, -2), Movement(-1, 2), Movement(1, -1), Movement(1, 1)}),
-    MoveCard("Monkey", {Movement(-1, -1), Movement(-1, 1), Movement(1, -1), Movement(1, 1)}),
-    MoveCard("Rabbit", {Movement(1, -1), Movement(-1, 1), Movement(0, 2)}),
-    MoveCard("Tiger", {Movement(-2, 0), Movement(1, 0)}),
-    MoveCard("Eel", {Movement(-1, -1), Movement(1, -1), Movement(0, 1)}),
-    MoveCard("Frog", {Movement(0, -2), Movement(-1, -1), Movement(1, 1)}),
-    MoveCard("Crane", {Movement(1, -1), Movement(1, 1), Movement(-1, 0)}),
-    MoveCard("Elephant", {Movement(0, 1), Movement(0, -1), Movement(-1, 1), Movement(-1, -1)}),
-    MoveCard("Rooster", {Movement(0, -1), Movement(1, -1), Movement(0, 1), Movement(-1, 1)}),
-    MoveCard("Goose", {Movement(0, -1), Movement(-1, -1), Movement(0, 1), Movement(1, 1)}),
-    MoveCard("Horse", {Movement(0, -1), Movement(-1, 0), Movement(1, 0)}),
+    MoveCard("Cobra", {Point(0, -1), Point(1, 1), Point(-1, 1)}),
+    MoveCard("Ox", {Point(-1, 0), Point(1, 0), Point(0, 1)}),
+    MoveCard("Crab", {Point(-1, 0), Point(0, 2), Point(0, -2)}),
+    MoveCard("Boar", {Point(0, -1), Point(0, 1), Point(-1, 0)}),
+    MoveCard("Mantis", {Point(-1, -1), Point(-1, 1), Point(1, 0)}),
+    MoveCard("Dragon", {Point(-1, -2), Point(-1, 2), Point(1, -1), Point(1, 1)}),
+    MoveCard("Monkey", {Point(-1, -1), Point(-1, 1), Point(1, -1), Point(1, 1)}),
+    MoveCard("Rabbit", {Point(1, -1), Point(-1, 1), Point(0, 2)}),
+    MoveCard("Tiger", {Point(-2, 0), Point(1, 0)}),
+    MoveCard("Eel", {Point(-1, -1), Point(1, -1), Point(0, 1)}),
+    MoveCard("Frog", {Point(0, -2), Point(-1, -1), Point(1, 1)}),
+    MoveCard("Crane", {Point(1, -1), Point(1, 1), Point(-1, 0)}),
+    MoveCard("Elephant", {Point(0, 1), Point(0, -1), Point(-1, 1), Point(-1, -1)}),
+    MoveCard("Rooster", {Point(0, -1), Point(1, -1), Point(0, 1), Point(-1, 1)}),
+    MoveCard("Goose", {Point(0, -1), Point(-1, -1), Point(0, 1), Point(1, 1)}),
+    MoveCard("Horse", {Point(0, -1), Point(-1, 0), Point(1, 0)}),
 };
