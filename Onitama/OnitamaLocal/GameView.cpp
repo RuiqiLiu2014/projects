@@ -4,12 +4,15 @@
 
 #include "GameView.h"
 
-#include <utility>
-
-void GameView::draw() const
+void GameView::draw(std::optional<Point> selectedCell) const
 {
-    boardView.draw();
+    boardView.draw(selectedCell);
     playerViews[0].draw();
     playerViews[1].draw();
     middleCardView.draw();
+}
+
+std::optional<Point> GameView::getHoveredCellLocation() const
+{
+    return boardView.getHoveredCell();
 }

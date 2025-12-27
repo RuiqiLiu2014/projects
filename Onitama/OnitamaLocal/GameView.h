@@ -23,7 +23,8 @@ public:
         playerViews{PlayerView(players[0], Display::WINDOW_WIDTH / 2, Display::PLAYER_VIEW_Y_OFFSET), PlayerView(players[1], Display::WINDOW_WIDTH / 2, Display::WINDOW_HEIGHT - Display::PLAYER_VIEW_Y_OFFSET)},
         middleCardView(middleCard, Display::WINDOW_WIDTH - Display::MIDDLE_CARD_X_OFFSET, Display::WINDOW_HEIGHT / 2),
         boardView(board, Display::WINDOW_WIDTH / 2, Display::WINDOW_HEIGHT / 2) {}
-    void draw() const;
+    void draw(std::optional<Point> selectedCell) const;
+    [[nodiscard]] std::optional<Point> getHoveredCellLocation() const;
 };
 
 

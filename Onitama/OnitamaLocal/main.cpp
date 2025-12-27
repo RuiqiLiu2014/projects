@@ -7,7 +7,6 @@
 int main()
 {
     auto gameController = GameController::create(MoveCard::ALL_CARDS);
-    gameController.start();
 
     // Initialization
     InitWindow(Display::WINDOW_WIDTH, Display::WINDOW_HEIGHT, "Onitama");
@@ -17,7 +16,7 @@ int main()
     while (!WindowShouldClose())
     {
         // Update
-
+        gameController.update();
 
         // Drawing
         BeginDrawing();

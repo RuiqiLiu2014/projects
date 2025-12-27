@@ -28,16 +28,25 @@ const std::vector<std::vector<Cell>>& Board::getCells() const
     return cells;
 }
 
-bool Board::movePiece(const int startR, const int startC, const int endR, const int endC)
+bool Board::isPlayersPiece(const int turn, const Point p) const
 {
-    Cell& start = cells[startR][startC];
-    Cell& end = cells[endR][endC];
-    if (start.isEmpty() || (start.isBlue() && end.isBlue()) || (start.isRed() && end.isRed()))
+    if (turn == 0)
+    {
+        return cells[p.r][p.c].isBlue();
+    }
+    return cells[p.r][p.c].isRed();
+}
+
+bool Board::movePiece(const Point start, const Point end)
+{
+    Cell& startCell = cells[start.r][start.c];
+    Cell& endCell = cells[end.r][end.c];
+    if (startCell.isEmpty() || (startCell.isBlue() && endCell.isBlue()) || (startCell.isRed() && endCell.isRed()))
     {
         return false;
     }
 
-    end.setStatus(start.getStatus());
-    start.setStatus(CellStatus::EMPTY);
+    endCell.setStatus(startCell.getStatus());
+    startCell.setStatus(CellStatus::EMPTY);
     return true;
 }

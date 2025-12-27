@@ -8,6 +8,7 @@
 #include <optional>
 
 #include "Board.h"
+#include "GameView.h"
 #include "MiddleCard.h"
 #include "MoveCard.h"
 #include "Player.h"
@@ -21,14 +22,17 @@ class GameController
     int currentTurn;
     std::optional<Point> selectedPieceLocation;
     std::optional<Point> targetLocation;
+    GameView gameView;
+    int winner;
 
     static std::vector<MoveCard> chooseCards(const std::vector<MoveCard>& allCards, int n);
     explicit GameController(const std::vector<MoveCard>& cards);
     void handleClick();
+    [[nodiscard]] int getWinner() const;
 
 public:
     static GameController create(const std::vector<MoveCard>& allCards);
-    void start();
+    void update();
     void display() const;
 };
 

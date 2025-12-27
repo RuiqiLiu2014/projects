@@ -9,15 +9,19 @@
 #include "raylib.h"
 #include <cmath>
 
-void CellView::draw() const
+void CellView::draw(bool selected) const
 {
     constexpr int size = Display::CELL_SIZE;
-    if (isHovered())
+    if (selected)
     {
-        DrawRectangleLines(x - size / 2, y - size / 2, size, size, GREEN);
+        DrawRectangleLines(x - size / 2 + 1, y - size / 2 + 1, size - 1, size - 1, GREEN);
+    }
+    else if (isHovered())
+    {
+        DrawRectangleLines(x - size / 2 + 1, y - size / 2 + 1, size - 1, size - 1, ORANGE);
     } else
     {
-        DrawRectangleLines(x - size / 2, y - size / 2, size, size, BLACK);
+        DrawRectangleLines(x - size / 2 + 1, y - size / 2 + 1, size - 1, size - 1, BLACK);
     }
     switch (cell.getStatus())
     {

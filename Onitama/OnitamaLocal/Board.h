@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "Cell.h"
+#include "Point.h"
 
 class Board
 {
@@ -15,7 +16,8 @@ class Board
 public:
     Board();
     [[nodiscard]] const std::vector<std::vector<Cell>>& getCells() const;
-    bool movePiece(int startR, int startC, int endR, int endC);
+    [[nodiscard]] bool isPlayersPiece(int turn, Point p) const;
+    bool movePiece(Point start, Point end);
 };
 
 

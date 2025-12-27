@@ -13,8 +13,8 @@ class CellView
 
 public:
     CellView(const Cell& cell, const int x, const int y) : cell(cell), x(x), y(y) {}
-    void draw() const;
-    bool isHovered() const;
+    void draw(bool selected) const;
+    [[nodiscard]] bool isHovered() const;
 };
 
 

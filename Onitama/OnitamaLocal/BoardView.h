@@ -4,8 +4,11 @@
 
 #ifndef ONITAMALOCAL_BOARDVIEW_H
 #define ONITAMALOCAL_BOARDVIEW_H
+#include <optional>
+
 #include "Board.h"
 #include "CellView.h"
+#include "Point.h"
 
 
 class BoardView
@@ -15,8 +18,8 @@ class BoardView
 
 public:
     explicit BoardView(const Board& board, const int x, const int y) : board(board), x(x), y(y) {}
-    void draw() const;
+    void draw(std::optional<Point> selectedCell) const;
+    [[nodiscard]] std::optional<Point> getHoveredCell() const;
 };
-
 
 #endif //ONITAMALOCAL_BOARDVIEW_H
