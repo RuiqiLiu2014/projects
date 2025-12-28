@@ -16,6 +16,7 @@ class MiddleCard
 public:
     explicit MiddleCard(MoveCard card) : card(std::move(card)) {}
     [[nodiscard]] const MoveCard& getCard() const;
+    void setCard(const MoveCard& card);
 };
 
 #endif //ONITAMALOCAL_MIDDLECARD_H

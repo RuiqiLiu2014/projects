@@ -15,6 +15,6 @@ void MiddleCardView::draw() const
     camera.zoom = 1;
 
     BeginMode2D(camera);
-    CardView(card.getCard(), x, y).draw();
+    CardView(card.getCard(), x, y, false, false).draw(GetScreenToWorld2D(GetMousePosition(), camera));
     EndMode2D();
 }

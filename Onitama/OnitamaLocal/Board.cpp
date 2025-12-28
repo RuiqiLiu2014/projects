@@ -6,6 +6,8 @@
 
 #include <iostream>
 
+#include "MoveCard.h"
+
 Board::Board()
 {
     this->cells = std::vector(5, std::vector<Cell>(5));
@@ -37,7 +39,7 @@ bool Board::isPlayersPiece(const int turn, const Point p) const
     return cells[p.r][p.c].isRed();
 }
 
-bool Board::movePiece(const Point start, const Point end)
+bool Board::movePiece(const Point start, const Point end, const MoveCard& card, bool upsideDown)
 {
     Cell& startCell = cells[start.r][start.c];
     Cell& endCell = cells[end.r][end.c];
@@ -46,7 +48,12 @@ bool Board::movePiece(const Point start, const Point end)
         return false;
     }
 
-    endCell.setStatus(startCell.getStatus());
-    startCell.setStatus(CellStatus::EMPTY);
-    return true;
+    if (card.canMoveTo(end.r - start.r, end.c - start.c, upsideDown))
+    {
+        endCell.setStatus(startCell.getStatus());
+        startCell.setStatus(CellStatus::EMPTY);
+        return true;
+    }
+
+    return false;
 }

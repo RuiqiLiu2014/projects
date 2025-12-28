@@ -14,7 +14,7 @@
 #include "DisplayConfig.h"
 #include "GameView.h"
 
-GameController::GameController(const std::vector<MoveCard>& cards) : players{Player(0), Player(1)}, middleCard(cards[4]), currentTurn(0), gameView(board, players, middleCard), winner(-1)
+GameController::GameController(const std::vector<MoveCard>& cards) : players{Player(0), Player(1)}, middleCard(cards[4]), currentTurn(0), gameView(board, players, middleCard, currentTurn), winner(-1), selectedCardIndex(-1)
 {
     players[0].addCard(cards[0]);
     players[0].addCard(cards[1]);
@@ -45,14 +45,16 @@ void GameController::update()
     if (targetLocation.has_value())
     {
         std::cout << "9" << std::endl;
-        if (board.movePiece(selectedPieceLocation.value(), targetLocation.value()))
+        if (board.movePiece(selectedPieceLocation.value(), targetLocation.value(), players[currentTurn].getCards()[selectedCardIndex], players[currentTurn].isUpsideDown()))
         {
-            selectedPieceLocation.reset();
-            targetLocation.reset();
-            currentTurn = 1 - currentTurn;
+            MoveCard card = players[currentTurn].removeCard(selectedCardIndex);
+            players[currentTurn].addCard(middleCard.getCard());
+            middleCard.setCard(card);
+            switchTurn();
             winner = getWinner();
         } else
         {
+            gameView.displayWarning("Illegal move");
             targetLocation.reset();
         }
     }
@@ -60,18 +62,19 @@ void GameController::update()
 
 void GameController::display() const
 {
-    gameView.draw(selectedPieceLocation);
+    gameView.draw(selectedPieceLocation, selectedCardIndex);
 }
 
 void GameController::handleClick()
 {
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
-        const auto location = gameView.getHoveredCellLocation();
+        const auto hoveredCellLocation = gameView.getHoveredCellLocation();
+        const auto hoveredCardIndex = gameView.getHoveredCardIndex();
 
-        if (location.has_value())
+        if (hoveredCellLocation.has_value())
         {
-            auto point = location.value();
+            auto point = hoveredCellLocation.value();
             std::cout << point.r << " " << point.c << std::endl;
 
             if (selectedPieceLocation.has_value())
@@ -89,10 +92,13 @@ void GameController::handleClick()
                         std::cout << "4" << std::endl;
                         selectedPieceLocation = point;
                     }
-                } else
+                } else if (selectedCardIndex != -1)
                 {
                     std::cout << "5" << std::endl;
                     targetLocation = point;
+                } else
+                {
+                    gameView.displayWarning("Select a move card first");
                 }
             } else
             {
@@ -102,6 +108,18 @@ void GameController::handleClick()
                     std::cout << "7" << std::endl;
                     selectedPieceLocation = point;
                 }
+            }
+        } else if (hoveredCardIndex != -1)
+        {
+            std::cout << "10" << std::endl;
+            if (selectedCardIndex == hoveredCardIndex)
+            {
+                std::cout << "11" << std::endl;
+                selectedCardIndex = -1;
+            } else
+            {
+                std::cout << "12" << std::endl;
+                selectedCardIndex = hoveredCardIndex;
             }
         } else
         {
@@ -148,4 +166,13 @@ int GameController::getWinner() const
         return 0;
     }
     return 1;
+}
+
+void GameController::switchTurn()
+{
+    gameView.switchTurn();
+    selectedCardIndex = -1;
+    selectedPieceLocation.reset();
+    targetLocation.reset();
+    currentTurn = 1 - currentTurn;
 }

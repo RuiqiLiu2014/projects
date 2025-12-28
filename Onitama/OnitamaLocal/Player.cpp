@@ -17,9 +17,11 @@ void Player::addCard(const MoveCard& card)
     cards.push_back(card);
 }
 
-void Player::removeCard(const int i)
+MoveCard Player::removeCard(const int i)
 {
+    MoveCard removed = cards[i];
     cards.erase(this->cards.begin() + i);
+    return removed;
 }
 
 const std::vector<MoveCard>& Player::getCards() const
@@ -39,9 +41,4 @@ void Player::displayCards() const
         std::cout << card.name << " ";
     }
     std::cout << std::endl;
-}
-
-void Player::takeTurn()
-{
-
 }

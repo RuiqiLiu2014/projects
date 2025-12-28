@@ -8,16 +8,22 @@
 
 #include "DisplayConfig.h"
 
-void CardView::draw() const
+void CardView::draw(const Vector2 mousePos) const
 {
     const Rectangle border = {x - Display::CARD_WIDTH / 2, y - Display::CARD_HEIGHT / 2, Display::CARD_WIDTH, Display::CARD_HEIGHT};
-    DrawRectangleRoundedLinesEx(border, 0.2, 10, 1.0, BLACK);
+    if (selected)
+    {
+        DrawRectangleRoundedLinesEx(border, 0.2, 10, 1.0, GREEN);
+    } else
+    {
+        DrawRectangleRoundedLinesEx(border, 0.2, 10, 1.0, isHovered(mousePos) ? ORANGE : BLACK);
+    }
 
     constexpr float size = Display::CARD_CELL_SIZE;
 
     const char* text = card.name.c_str();
-    const int textWidth = MeasureText(text, Display::FONT_SIZE);
-    DrawText(text, x - textWidth / 2, y - Display::CARD_HEIGHT / 2 + 5, Display::FONT_SIZE, BLACK);
+    const int textWidth = MeasureText(text, Display::CARD_FONT_SIZE);
+    DrawText(text, x - textWidth / 2, y - Display::CARD_HEIGHT / 2 + 5, Display::CARD_FONT_SIZE, BLACK);
 
     const float center_y = y + Display::CARD_HEIGHT / 2 - size * 3;
 
@@ -30,7 +36,7 @@ void CardView::draw() const
             {
                 DrawRectangleRec(rect, DARKGRAY);
             }
-            else if (card.canMoveTo(r, c))
+            else if (card.canMoveTo(r, c, false))
             {
                 DrawRectangleRec(rect, GRAY);
             }
@@ -40,4 +46,12 @@ void CardView::draw() const
             }
         }
     }
+}
+
+bool CardView::isHovered(const Vector2 mousePos) const
+{
+    float dx = std::abs(mousePos.x - x);
+    float dy = std::abs(mousePos.y - y);
+
+    return hoverable && dx <= Display::CARD_WIDTH / 2 && dy <= Display::CARD_HEIGHT / 2;
 }

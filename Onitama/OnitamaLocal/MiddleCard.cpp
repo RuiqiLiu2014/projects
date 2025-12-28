@@ -8,3 +8,8 @@ const MoveCard& MiddleCard::getCard() const
 {
     return card;
 }
+
+void MiddleCard::setCard(const MoveCard& card)
+{
+    this->card = card;
+}

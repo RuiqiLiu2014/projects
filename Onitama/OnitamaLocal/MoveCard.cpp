@@ -13,9 +13,9 @@ MoveCard::MoveCard(std::string name, std::vector<Point> movements)
     this->movements = std::move(movements);
 }
 
-bool MoveCard::canMoveTo(const int r, const int c) const
+bool MoveCard::canMoveTo(const int r, const int c, bool upsideDown) const
 {
-    return std::ranges::count(movements, Point(r, c)) > 0;
+    return std::ranges::count(movements, upsideDown ? Point(-r, -c) : Point(r, c)) > 0;
 }
 
 std::vector<MoveCard> MoveCard::ALL_CARDS = {

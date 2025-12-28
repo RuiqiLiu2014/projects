@@ -15,7 +15,7 @@ struct MoveCard
     std::vector<Point> movements;
 
     MoveCard(std::string name, std::vector<Point> movements);
-    [[nodiscard]] bool canMoveTo(int r, int c) const;
+    [[nodiscard]] bool canMoveTo(int r, int c, bool upsideDown) const;
     static std::vector<MoveCard> ALL_CARDS;
 };
 

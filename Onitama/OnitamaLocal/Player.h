@@ -17,7 +17,7 @@ class Player
 public:
     explicit Player(int index);
     void addCard(const MoveCard& card);
-    void removeCard(int i);
+    MoveCard removeCard(int i);
     [[nodiscard]] const std::vector<MoveCard>& getCards() const;
     [[nodiscard]] bool isUpsideDown() const;
     void displayCards() const;

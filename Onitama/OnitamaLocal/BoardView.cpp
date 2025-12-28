@@ -34,7 +34,7 @@ std::optional<Point> BoardView::getHoveredCell() const
 
     if (relativeX >= 0 && relativeX <= Display::CELL_SIZE * 5 && relativeY >= 0 && relativeY <= Display::CELL_SIZE * 5)
     {
-        return Point{ relativeY / Display::CELL_SIZE, relativeX / Display::CELL_SIZE };
+        return Point{relativeY / Display::CELL_SIZE, relativeX / Display::CELL_SIZE};
     }
     return std::nullopt;
 }

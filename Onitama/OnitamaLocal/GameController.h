@@ -20,6 +20,7 @@ class GameController
     std::array<Player, 2> players;
     MiddleCard middleCard;
     int currentTurn;
+    int selectedCardIndex;
     std::optional<Point> selectedPieceLocation;
     std::optional<Point> targetLocation;
     GameView gameView;
@@ -29,6 +30,7 @@ class GameController
     explicit GameController(const std::vector<MoveCard>& cards);
     void handleClick();
     [[nodiscard]] int getWinner() const;
+    void switchTurn();
 
 public:
     static GameController create(const std::vector<MoveCard>& allCards);

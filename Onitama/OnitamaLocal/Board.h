@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "Cell.h"
+#include "MoveCard.h"
 #include "Point.h"
 
 class Board
@@ -17,7 +18,7 @@ public:
     Board();
     [[nodiscard]] const std::vector<std::vector<Cell>>& getCells() const;
     [[nodiscard]] bool isPlayersPiece(int turn, Point p) const;
-    bool movePiece(Point start, Point end);
+    bool movePiece(Point start, Point end, const MoveCard& card, bool upsideDown);
 };
 
 
