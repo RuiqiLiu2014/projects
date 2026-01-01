@@ -3,26 +3,13 @@
 //
 
 #include "Board.h"
-
-#include <iostream>
-
 #include "MoveCard.h"
 
 Board::Board()
 {
     this->cells = std::vector(5, std::vector<Cell>(5));
 
-    this->cells[0][0].setStatus(CellStatus::BLUE_DUDE);
-    this->cells[0][1].setStatus(CellStatus::BLUE_DUDE);
-    this->cells[0][2].setStatus(CellStatus::BLUE_KING);
-    this->cells[0][3].setStatus(CellStatus::BLUE_DUDE);
-    this->cells[0][4].setStatus(CellStatus::BLUE_DUDE);
-
-    this->cells[4][0].setStatus(CellStatus::RED_DUDE);
-    this->cells[4][1].setStatus(CellStatus::RED_DUDE);
-    this->cells[4][2].setStatus(CellStatus::RED_KING);
-    this->cells[4][3].setStatus(CellStatus::RED_DUDE);
-    this->cells[4][4].setStatus(CellStatus::RED_DUDE);
+    reset();
 }
 
 const std::vector<std::vector<Cell>>& Board::getCells() const
@@ -39,7 +26,7 @@ bool Board::isPlayersPiece(const int turn, const Point p) const
     return cells[p.r][p.c].isRed();
 }
 
-bool Board::movePiece(const Point start, const Point end, const MoveCard& card, bool upsideDown)
+bool Board::movePiece(const Point start, const Point end, const MoveCard& card, const bool upsideDown)
 {
     Cell& startCell = cells[start.r][start.c];
     Cell& endCell = cells[end.r][end.c];
@@ -56,4 +43,27 @@ bool Board::movePiece(const Point start, const Point end, const MoveCard& card, 
     }
 
     return false;
+}
+
+void Board::reset()
+{
+    for (auto& row : cells)
+    {
+        for (auto& cell : row)
+        {
+            cell.setStatus(CellStatus::EMPTY);
+        }
+    }
+
+    cells[0][0].setStatus(CellStatus::BLUE_DUDE);
+    cells[0][1].setStatus(CellStatus::BLUE_DUDE);
+    cells[0][2].setStatus(CellStatus::BLUE_KING);
+    cells[0][3].setStatus(CellStatus::BLUE_DUDE);
+    cells[0][4].setStatus(CellStatus::BLUE_DUDE);
+
+    cells[4][0].setStatus(CellStatus::RED_DUDE);
+    cells[4][1].setStatus(CellStatus::RED_DUDE);
+    cells[4][2].setStatus(CellStatus::RED_KING);
+    cells[4][3].setStatus(CellStatus::RED_DUDE);
+    cells[4][4].setStatus(CellStatus::RED_DUDE);
 }

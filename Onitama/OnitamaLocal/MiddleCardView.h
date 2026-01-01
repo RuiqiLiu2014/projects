@@ -4,21 +4,16 @@
 
 #ifndef ONITAMALOCAL_MIDDLECARDVIEW_H
 #define ONITAMALOCAL_MIDDLECARDVIEW_H
-#include "CardView.h"
-
-#include <utility>
 
 #include "MiddleCard.h"
-
 
 class MiddleCardView
 {
     const MiddleCard& card;
-    int x, y;
 
 public:
-    MiddleCardView(const MiddleCard& card, const int x, const int y) : card(card), x(x), y(y) {}
-    void draw() const;
+    explicit MiddleCardView(const MiddleCard& card) : card(card) {}
+    void draw(int x, int y) const;
 };
 
 

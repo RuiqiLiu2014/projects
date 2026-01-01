@@ -9,7 +9,6 @@ CellStatus Cell::getStatus() const
     return status;
 }
 
-
 void Cell::setStatus(const CellStatus newStatus)
 {
     status = newStatus;

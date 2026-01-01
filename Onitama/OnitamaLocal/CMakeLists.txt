@@ -30,6 +30,10 @@ add_executable(OnitamaLocal main.cpp
         MiddleCardView.h
         MiddleCard.cpp
         MiddleCard.h
+        ScoreView.cpp
+        ScoreView.h
+        TurnIndicatorView.cpp
+        TurnIndicatorView.h
 )
 
 target_link_libraries(OnitamaLocal PRIVATE raylib)

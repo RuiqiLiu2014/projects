@@ -8,7 +8,6 @@
 
 #include "MoveCard.h"
 
-
 class MiddleCard
 {
     MoveCard card;

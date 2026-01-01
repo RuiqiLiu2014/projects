@@ -13,7 +13,6 @@
 #include "MoveCard.h"
 #include "Player.h"
 
-
 class GameController
 {
     Board board;
@@ -31,9 +30,10 @@ class GameController
     void handleClick();
     [[nodiscard]] int getWinner() const;
     void switchTurn();
+    void reset();
 
 public:
-    static GameController create(const std::vector<MoveCard>& allCards);
+    static GameController create();
     void update();
     void display() const;
 };

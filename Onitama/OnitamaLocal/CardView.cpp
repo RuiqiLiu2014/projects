@@ -5,27 +5,23 @@
 #include "CardView.h"
 
 #include <raylib.h>
-
 #include "DisplayConfig.h"
 
-void CardView::draw(const Vector2 mousePos) const
+void CardView::draw(const Vector2 mousePos, const int x, const int y) const
 {
-    const Rectangle border = {x - Display::CARD_WIDTH / 2, y - Display::CARD_HEIGHT / 2, Display::CARD_WIDTH, Display::CARD_HEIGHT};
+    const Rectangle border = {x - Display::CARD_WIDTH() / 2, y - Display::CARD_HEIGHT() / 2, Display::CARD_WIDTH(), Display::CARD_HEIGHT()};
     if (selected)
     {
         DrawRectangleRoundedLinesEx(border, 0.2, 10, 1.0, GREEN);
     } else
     {
-        DrawRectangleRoundedLinesEx(border, 0.2, 10, 1.0, isHovered(mousePos) ? ORANGE : BLACK);
+        DrawRectangleRoundedLinesEx(border, 0.2, 10, 1.0, isHovered(mousePos, x, y) ? ORANGE : BLACK);
     }
 
-    constexpr float size = Display::CARD_CELL_SIZE;
+    Display::drawText(card.name.c_str(), x, y - Display::CARD_HEIGHT() / 2 + 5, Display::CARD_FONT_SIZE(), BLACK);
 
-    const char* text = card.name.c_str();
-    const int textWidth = MeasureText(text, Display::CARD_FONT_SIZE);
-    DrawText(text, x - textWidth / 2, y - Display::CARD_HEIGHT / 2 + 5, Display::CARD_FONT_SIZE, BLACK);
-
-    const float center_y = y + Display::CARD_HEIGHT / 2 - size * 3;
+    const float size = Display::CARD_CELL_SIZE();
+    const float center_y = y + Display::CARD_HEIGHT() / 2 - size * 3;
 
     for (int r = -2; r <= 2; r++)
     {
@@ -48,10 +44,7 @@ void CardView::draw(const Vector2 mousePos) const
     }
 }
 
-bool CardView::isHovered(const Vector2 mousePos) const
+bool CardView::isHovered(const Vector2 mousePos, const int x, const int y) const
 {
-    float dx = std::abs(mousePos.x - x);
-    float dy = std::abs(mousePos.y - y);
-
-    return hoverable && dx <= Display::CARD_WIDTH / 2 && dy <= Display::CARD_HEIGHT / 2;
+    return hoverable && std::abs(mousePos.x - x) <= Display::CARD_WIDTH() / 2 && std::abs(mousePos.y - y) <= Display::CARD_HEIGHT() / 2;
 }

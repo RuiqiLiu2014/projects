@@ -9,12 +9,11 @@
 class CellView
 {
     const Cell& cell;
-    int x, y;
 
 public:
-    CellView(const Cell& cell, const int x, const int y) : cell(cell), x(x), y(y) {}
-    void draw(bool selected) const;
-    [[nodiscard]] bool isHovered() const;
+    explicit CellView(const Cell& cell) : cell(cell) {}
+    void draw(int x, int y, bool selected) const;
+    [[nodiscard]] static bool isHovered(int x, int y);
 };
 
 

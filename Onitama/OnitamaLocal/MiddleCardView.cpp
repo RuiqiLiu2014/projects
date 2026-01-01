@@ -6,7 +6,9 @@
 
 #include <raylib.h>
 
-void MiddleCardView::draw() const
+#include "CardView.h"
+
+void MiddleCardView::draw(const int x, const int y) const
 {
     Camera2D camera = {};
     camera.target = (Vector2){static_cast<float>(x), static_cast<float>(y)};
@@ -15,6 +17,6 @@ void MiddleCardView::draw() const
     camera.zoom = 1;
 
     BeginMode2D(camera);
-    CardView(card.getCard(), x, y, false, false).draw(GetScreenToWorld2D(GetMousePosition(), camera));
+    CardView(card.getCard(), false, false).draw(GetScreenToWorld2D(GetMousePosition(), camera), x, y);
     EndMode2D();
 }

@@ -5,16 +5,13 @@
 #include "GameController.h"
 
 #include <chrono>
-#include <iostream>
 #include <random>
 #include <raylib.h>
-#include <utility>
 
 #include "BoardView.h"
-#include "DisplayConfig.h"
 #include "GameView.h"
 
-GameController::GameController(const std::vector<MoveCard>& cards) : players{Player(0), Player(1)}, middleCard(cards[4]), currentTurn(0), gameView(board, players, middleCard, currentTurn), winner(-1), selectedCardIndex(-1)
+GameController::GameController(const std::vector<MoveCard>& cards) : players{Player(0), Player(1)}, middleCard(cards[4]), currentTurn(0), selectedCardIndex(-1), gameView(board, players, middleCard, currentTurn), winner(-1)
 {
     players[0].addCard(cards[0]);
     players[0].addCard(cards[1]);
@@ -27,27 +24,30 @@ std::vector<MoveCard> GameController::chooseCards(const std::vector<MoveCard>& a
     std::vector<MoveCard> chosenCards;
     std::random_device rd;
     std::default_random_engine rng(rd());
-    std::sample(allCards.begin(), allCards.end(), std::back_inserter(chosenCards), n, rng);
+    std::ranges::sample(allCards, std::back_inserter(chosenCards), n, rng);
     return chosenCards;
 }
 
-GameController GameController::create(const std::vector<MoveCard>& allCards)
+GameController GameController::create()
 {
-    return GameController(chooseCards(allCards, 5));
+    return GameController(chooseCards(MoveCard::ALL_CARDS, 5));
 }
 
 void GameController::update()
 {
     handleClick();
 
-    if (winner != -1) return;
+    if (winner != -1)
+    {
+        players[winner].addScore(1);
+        reset();
+    }
 
     if (targetLocation.has_value())
     {
-        std::cout << "9" << std::endl;
         if (board.movePiece(selectedPieceLocation.value(), targetLocation.value(), players[currentTurn].getCards()[selectedCardIndex], players[currentTurn].isUpsideDown()))
         {
-            MoveCard card = players[currentTurn].removeCard(selectedCardIndex);
+            const MoveCard card = players[currentTurn].removeCard(selectedCardIndex);
             players[currentTurn].addCard(middleCard.getCard());
             middleCard.setCard(card);
             switchTurn();
@@ -58,6 +58,29 @@ void GameController::update()
             targetLocation.reset();
         }
     }
+}
+
+void GameController::reset()
+{
+    board.reset();
+
+    players[0].clearCards();
+    players[1].clearCards();
+    const std::vector<MoveCard>& cards = chooseCards(MoveCard::ALL_CARDS, 5);
+    players[0].addCard(cards[0]);
+    players[0].addCard(cards[1]);
+    players[1].addCard(cards[2]);
+    players[1].addCard(cards[3]);
+
+    middleCard.setCard(cards[4]);
+
+    currentTurn = winner;
+    gameView.setTurn(currentTurn);
+
+    selectedCardIndex = -1;
+    selectedPieceLocation.reset();
+    targetLocation.reset();
+    winner = -1;
 }
 
 void GameController::display() const
@@ -75,26 +98,20 @@ void GameController::handleClick()
         if (hoveredCellLocation.has_value())
         {
             auto point = hoveredCellLocation.value();
-            std::cout << point.r << " " << point.c << std::endl;
 
             if (selectedPieceLocation.has_value())
             {
-                std::cout << "1" << std::endl;
                 if (board.isPlayersPiece(currentTurn, point))
                 {
-                    std::cout << "2" << std::endl;
                     if (selectedPieceLocation.value() == point)
                     {
-                        std::cout << "3" << std::endl;
                         selectedPieceLocation.reset();
                     } else
                     {
-                        std::cout << "4" << std::endl;
                         selectedPieceLocation = point;
                     }
                 } else if (selectedCardIndex != -1)
                 {
-                    std::cout << "5" << std::endl;
                     targetLocation = point;
                 } else
                 {
@@ -102,28 +119,23 @@ void GameController::handleClick()
                 }
             } else
             {
-                std::cout << "6" << std::endl;
                 if (board.isPlayersPiece(currentTurn, point))
                 {
-                    std::cout << "7" << std::endl;
                     selectedPieceLocation = point;
                 }
             }
         } else if (hoveredCardIndex != -1)
         {
-            std::cout << "10" << std::endl;
             if (selectedCardIndex == hoveredCardIndex)
             {
-                std::cout << "11" << std::endl;
                 selectedCardIndex = -1;
             } else
             {
-                std::cout << "12" << std::endl;
                 selectedCardIndex = hoveredCardIndex;
+                gameView.displayWarning("");
             }
         } else
         {
-            std::cout << "8" << std::endl;
             selectedPieceLocation.reset();
         }
     }
@@ -131,7 +143,7 @@ void GameController::handleClick()
 
 int GameController::getWinner() const
 {
-    auto cells = board.getCells();
+    const auto cells = board.getCells();
     bool blueKingAlive = false;
     bool redKingAlive = false;
     for (int r = 0; r < 5; r++)
@@ -170,9 +182,10 @@ int GameController::getWinner() const
 
 void GameController::switchTurn()
 {
-    gameView.switchTurn();
+    gameView.displayWarning("");
     selectedCardIndex = -1;
     selectedPieceLocation.reset();
     targetLocation.reset();
     currentTurn = 1 - currentTurn;
+    gameView.setTurn(currentTurn);
 }

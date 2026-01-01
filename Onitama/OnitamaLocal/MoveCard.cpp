@@ -13,7 +13,7 @@ MoveCard::MoveCard(std::string name, std::vector<Point> movements)
     this->movements = std::move(movements);
 }
 
-bool MoveCard::canMoveTo(const int r, const int c, bool upsideDown) const
+bool MoveCard::canMoveTo(const int r, const int c, const bool upsideDown) const
 {
     return std::ranges::count(movements, upsideDown ? Point(-r, -c) : Point(r, c)) > 0;
 }
@@ -34,5 +34,5 @@ std::vector<MoveCard> MoveCard::ALL_CARDS = {
     MoveCard("Elephant", {Point(0, 1), Point(0, -1), Point(-1, 1), Point(-1, -1)}),
     MoveCard("Rooster", {Point(0, -1), Point(1, -1), Point(0, 1), Point(-1, 1)}),
     MoveCard("Goose", {Point(0, -1), Point(-1, -1), Point(0, 1), Point(1, 1)}),
-    MoveCard("Horse", {Point(0, -1), Point(-1, 0), Point(1, 0)}),
+    MoveCard("Horse", {Point(0, -1), Point(-1, 0), Point(1, 0)})
 };

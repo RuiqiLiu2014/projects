@@ -9,14 +9,14 @@
 #include "raylib.h"
 #include <cmath>
 
-void CellView::draw(bool selected) const
+void CellView::draw(const int x, const int y, const bool selected) const
 {
-    constexpr int size = Display::CELL_SIZE;
+    const int size = Display::CELL_SIZE();
     if (selected)
     {
         DrawRectangleLines(x - size / 2 + 1, y - size / 2 + 1, size - 1, size - 1, GREEN);
     }
-    else if (isHovered())
+    else if (isHovered(x, y))
     {
         DrawRectangleLines(x - size / 2 + 1, y - size / 2 + 1, size - 1, size - 1, ORANGE);
     } else
@@ -33,7 +33,7 @@ void CellView::draw(bool selected) const
     }
 }
 
-bool CellView::isHovered() const
+bool CellView::isHovered(const int x, const int y)
 {
-    return std::abs(GetMouseX() - x) <= Display::CELL_SIZE / 2 && std::abs(GetMouseY() - y) <= Display::CELL_SIZE / 2;
+    return std::abs(GetMouseX() - x) <= Display::CELL_SIZE() / 2 && std::abs(GetMouseY() - y) <= Display::CELL_SIZE() / 2;
 }

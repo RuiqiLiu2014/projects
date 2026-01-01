@@ -4,14 +4,6 @@
 
 #include "Player.h"
 
-#include <iostream>
-
-Player::Player(const int index)
-{
-    this->cards = {};
-    this->index = index;
-}
-
 void Player::addCard(const MoveCard& card)
 {
     cards.push_back(card);
@@ -24,6 +16,11 @@ MoveCard Player::removeCard(const int i)
     return removed;
 }
 
+void Player::clearCards()
+{
+    cards.clear();
+}
+
 const std::vector<MoveCard>& Player::getCards() const
 {
     return cards;
@@ -34,11 +31,17 @@ bool Player::isUpsideDown() const
     return index == 0;
 }
 
-void Player::displayCards() const
+int Player::getScore() const
 {
-    for (const MoveCard& card : cards)
-    {
-        std::cout << card.name << " ";
-    }
-    std::cout << std::endl;
+    return score;
+}
+
+void Player::addScore(const int score)
+{
+    this->score += score;
+}
+
+int Player::getIndex() const
+{
+    return index;
 }

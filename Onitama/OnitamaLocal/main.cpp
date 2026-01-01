@@ -1,4 +1,5 @@
-#include "CardView.h"
+#include <iostream>
+
 #include "DisplayConfig.h"
 #include "GameController.h"
 #include "MoveCard.h"
@@ -6,11 +7,12 @@
 
 int main()
 {
-    auto gameController = GameController::create(MoveCard::ALL_CARDS);
-
     // Initialization
-    InitWindow(Display::WINDOW_WIDTH, Display::WINDOW_HEIGHT, "Onitama");
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    InitWindow(1000, 1000, "Onitama");
     SetTargetFPS(60);
+
+    auto gameController = GameController::create();
 
     // Main game loop
     while (!WindowShouldClose())
@@ -20,7 +22,7 @@ int main()
 
         // Drawing
         BeginDrawing();
-        ClearBackground(RAYWHITE);
+        ClearBackground(WHITE);
         gameController.display();
         EndDrawing();
     }
