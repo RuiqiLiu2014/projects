@@ -17,6 +17,8 @@ namespace Display {
     inline int Height() { return GetScreenHeight(); }
     inline int MinDim() { return std::min(Width(), Height()); }
 
+    inline float MOUSE_RADIUS() { return 10.0f; }
+
     inline int TITLE_FONT_SIZE() { return MinDim() / 15.0f; }
     inline float BUTTON_SIZE() { return MinDim() / 5.0f; }
     inline float BUTTON_GAP() { return 20; }
@@ -34,19 +36,28 @@ namespace Display {
                     switch (currentTurn)
                     {
                         case CellStatus::EMPTY: throw std::invalid_argument("CellStatus::EMPTY");
-                        case CellStatus::P1: return SKYBLUE;
-                        case CellStatus::P2: return ORANGE;
-                        case CellStatus::P3: return LIME;
-                        case CellStatus::P4: return WHITE;
+                        case CellStatus::P1: return Fade(SKYBLUE, 0.5f);
+                        case CellStatus::P2: return Fade(RED, 0.3f);
+                        case CellStatus::P3: return Fade(GREEN, 0.3f);
+                        case CellStatus::P4: return Fade(ORANGE, 0.3f);
                     }
                 }
-                return GRAY;
-            case CellStatus::P1: return BLUE;
-            case CellStatus::P2: return RED;
-            case CellStatus::P3: return GREEN;
-            case CellStatus::P4: return YELLOW;
+                return Fade(GRAY, 0.3f);
+            case CellStatus::P1: return Fade(SKYBLUE, 0.9f);
+            case CellStatus::P2: return Fade(RED, 0.7f);
+            case CellStatus::P3: return Fade(GREEN, 0.5f);
+            case CellStatus::P4: return Fade(ORANGE, 0.7f);
         }
         throw std::runtime_error("Unknown CellStatus");
+    }
+    inline Color MOUSE_COLOR(CellStatus status) {
+        switch (status) {
+            case CellStatus::P1: return Fade(SKYBLUE, 1.0f);
+            case CellStatus::P2: return Fade(RED, 1.0f);
+            case CellStatus::P3: return Fade(GREEN, 1.0f);
+            case CellStatus::P4: return Fade(ORANGE, 1.0f);
+            default: throw std::runtime_error("Unknown CellStatus for mousecolor");
+        }
     }
 
     inline float SUBGRID_SIZE() { return CELL_RADIUS() * 6 + CELL_GAP() * 4; }

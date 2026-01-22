@@ -8,11 +8,11 @@
 
 #include "Board.h"
 #include "BoardView.h"
-#include "Turn.h"
 
 enum class AppState {
     CHOOSE_PLAYERS,
-    PLAYING
+    PLAYING,
+    GAME_OVER
 };
 
 class GameController {
@@ -22,11 +22,14 @@ class GameController {
     std::unique_ptr<BoardView> boardView;
 
     void drawPlayerSelect();
+    static void drawWinScreen(CellStatus winner);
+    void drawMouse() const;
     void createGame(int players);
+    void reset() const;
 
 public:
     GameController();
-    void update() const;
+    void update();
     void display();
     void handleClick() const;
 };

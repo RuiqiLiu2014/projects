@@ -23,4 +23,5 @@ public:
     [[nodiscard]] int turnIndex() const;
     [[nodiscard]] TurnPhase turnPhase() const;
     [[nodiscard]] CellStatus cellStatus() const;
+    void reset();
 };

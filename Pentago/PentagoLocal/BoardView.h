@@ -10,7 +10,6 @@
 #include "HoverStatus.h"
 #include "Turn.h"
 
-
 class BoardView {
     const Board& board;
     HoverStatus hoverStatus;

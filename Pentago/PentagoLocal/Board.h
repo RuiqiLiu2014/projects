@@ -14,6 +14,8 @@ class Board {
     int size;
     std::vector<std::vector<SubGrid>> subgrids;
 
+    [[nodiscard]] std::vector<std::vector<CellStatus>> toArray() const;
+
 public:
     explicit Board(int size);
     [[nodiscard]] const std::vector<std::vector<SubGrid>>& getSubgrids() const;
@@ -21,6 +23,7 @@ public:
     void reset();
     bool placePiece(CellStatus status, Point subgrid, Point cell);
     void rotate(Point subgrid, bool clockwise);
+    [[nodiscard]] CellStatus winner() const;
 };
 
 

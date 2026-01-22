@@ -43,18 +43,57 @@ void GameController::drawPlayerSelect() {
     }
 }
 
-void GameController::update() const {
+void GameController::drawWinScreen(CellStatus winner) {
+    std::string text;
+    switch (winner) {
+        case CellStatus::P1: text = "Blue wins"; break;
+        case CellStatus::P2: text = "Red wins"; break;
+        case CellStatus::P3: text = "Green wins"; break;
+        case CellStatus::P4: text = "Orange wins"; break;
+        default: throw std::invalid_argument("Invalid winner");
+    }
+    Display::drawText(text.c_str(), Display::Width() / 2, Display::Height() / 2, Display::TITLE_FONT_SIZE() * 2, Display::MOUSE_COLOR(winner));
+}
+
+void GameController::drawMouse() const {
+    HideCursor();
+    Color color;
+    if (state == AppState::PLAYING) {
+        color = Display::CELL_COLOR(turn->cellStatus(), false, turn->cellStatus());
+    } else {
+        color = BLACK;
+    }
+
+    Vector2 mouse = GetMousePosition();
+
+    DrawCircle(mouse.x, mouse.y, Display::MOUSE_RADIUS(), color);
+}
+
+void GameController::update() {
     if (state == AppState::PLAYING) {
         handleClick();
+        CellStatus winner = board->winner();
+        if (winner != CellStatus::EMPTY) {
+            state = AppState::GAME_OVER;
+        }
         boardView->update();
     }
 }
 
 void GameController::display() {
     switch (state) {
-        case AppState::CHOOSE_PLAYERS: drawPlayerSelect(); break;
-        case AppState::PLAYING: boardView->draw(turn->cellStatus()); break;
+        case AppState::CHOOSE_PLAYERS:
+            drawPlayerSelect();
+            break;
+        case AppState::PLAYING:
+            boardView->draw(turn->cellStatus(), turn->turnPhase());
+            break;
+        case AppState::GAME_OVER:
+            boardView->draw(turn->cellStatus(), turn->turnPhase());
+            drawWinScreen(board->winner());
+            break;
     }
+    drawMouse();
 }
 
 void GameController::handleClick() const {
@@ -64,10 +103,10 @@ void GameController::handleClick() const {
                 if (HoverStatus hover = boardView->getHoverStatus(); hover.active) {
                     if (board->placePiece(turn->cellStatus(), hover.subgrid, hover.cell)) {
                         turn->next();
-                        break;
                     }
                 }
             }
+        break;
         case TurnPhase::Rotating:
             if (HoverStatus hover = boardView->getHoverStatus(); hover.active) {
                 if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -77,7 +116,12 @@ void GameController::handleClick() const {
                     board->rotate(hover.subgrid, true);
                     turn->next();
                 }
-                break;
             }
+        break;
     }
+}
+
+void GameController::reset() const {
+    board->reset();
+    turn->reset();
 }

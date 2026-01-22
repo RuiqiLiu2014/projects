@@ -35,3 +35,8 @@ CellStatus Turn::cellStatus() const {
         default: throw std::out_of_range("Turn::cellStatus");
     }
 }
+
+void Turn::reset() {
+    index = 0;
+    phase = TurnPhase::Placing;
+}

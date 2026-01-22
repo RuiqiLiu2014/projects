@@ -36,7 +36,7 @@ void BoardView::draw(CellStatus currentTurn, TurnPhase currentPhase) const {
     for (int r = 0; r < board.getSize(); r++) {
         for (int c = 0; c < board.getSize(); c++) {
             auto [x, y] = Display::SUBGRID(board.getSize(), r, c);
-            SubGridView(subgrids[r][c]).draw(x, y, hoverStatus.active && r == hoverStatus.subgrid.r && c == hoverStatus.subgrid.c, hoverStatus.cell, currentTurn);
+            SubGridView(subgrids[r][c]).draw(x, y, hoverStatus.active && r == hoverStatus.subgrid.r && c == hoverStatus.subgrid.c, hoverStatus.cell, hoverStatus.active && currentPhase == TurnPhase::Placing, currentTurn);
         }
     }
 }
