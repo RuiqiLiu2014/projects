@@ -111,9 +111,11 @@ void GameController::handleClick() const {
             if (HoverStatus hover = boardView->getHoverStatus(); hover.active) {
                 if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     board->rotate(hover.subgrid, false);
+                    boardView->startRotation(hover.subgrid, false);
                     turn->next();
                 } else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
                     board->rotate(hover.subgrid, true);
+                    boardView->startRotation(hover.subgrid, true);
                     turn->next();
                 }
             }
