@@ -61,7 +61,7 @@ namespace Display {
     }
 
     inline float SUBGRID_SIZE() { return CELL_RADIUS() * 6 + CELL_GAP() * 4; }
-    inline float SUBGRID_GAP() { return 2.0f; }
+    inline float SUBGRID_GAP() { return 4.0f; }
     inline Color SUBGRID_COLOR() { return LIGHTGRAY; }
 
     inline Vector2 TITLE() { return Vector2(Width() / 2.0f, Height() / 4.0f); }

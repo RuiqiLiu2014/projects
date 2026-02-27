@@ -10,7 +10,9 @@
 BoardView::BoardView(const Board& board) : board(board), hoverStatus(Point(-1, -1), Point(-1, -1)) {
 }
 
-void BoardView::update() {
+// TODO ADD THE MOUSE LOGO FOR ROTATING
+
+void BoardView::update(Board& boardModel) {
     Vector2 mouse = GetMousePosition();
     hoverStatus.active = false;
 
@@ -42,26 +44,47 @@ void BoardView::update() {
         if (std::abs(anim.currentAngle) >= 90) {
             anim.active = false;
             anim.currentAngle = 0;
+
+            if (pending.exists) {
+                boardModel.rotate(pending.subgrid, pending.clockwise);
+                pending.exists = false;
+            }
         }
     }
 }
 
 void BoardView::draw(CellStatus currentTurn, TurnPhase currentPhase) const {
     const auto& subgrids = board.getSubgrids();
-    for (int r = 0; r < board.getSize(); r++) {
-        for (int c = 0; c < board.getSize(); c++) {
-            auto [x, y] = Display::SUBGRID(board.getSize(), r, c);
+    int size = board.getSize();
 
+    // PASS 1: Draw all subgrids that are NOT animating
+    for (int r = 0; r < size; r++) {
+        for (int c = 0; c < size; c++) {
+            // Skip the animating one for now
             if (anim.active && anim.subgrid.r == r && anim.subgrid.c == c) {
-                rlPushMatrix();
-                rlTranslatef(x, y, 0.0f);
-                rlRotatef(anim.currentAngle, 0, 0, 1);
-                SubGridView(subgrids[r][c]).draw(0, 0, hoverStatus.active && r == hoverStatus.subgrid.r && c == hoverStatus.subgrid.c, hoverStatus.cell, hoverStatus.active && currentPhase == TurnPhase::Placing, currentTurn);
-                rlPopMatrix();
-            } else {
-                SubGridView(subgrids[r][c]).draw(x, y, hoverStatus.active && r == hoverStatus.subgrid.r && c == hoverStatus.subgrid.c, hoverStatus.cell, hoverStatus.active && currentPhase == TurnPhase::Placing, currentTurn);
+                continue;
             }
+
+            auto [x, y] = Display::SUBGRID(size, r, c);
+            bool isHovered = hoverStatus.active && r == hoverStatus.subgrid.r && c == hoverStatus.subgrid.c && !anim.active;
+            bool isPlacing = isHovered && currentPhase == TurnPhase::Placing;
+
+            SubGridView(subgrids[r][c]).draw(x, y, isHovered, hoverStatus.cell, isPlacing, currentTurn);
         }
+    }
+
+    // PASS 2: Draw the animating subgrid LAST (so it's on top)
+    if (anim.active) {
+        auto [x, y] = Display::SUBGRID(size, anim.subgrid.r, anim.subgrid.c);
+
+        rlPushMatrix();
+        rlTranslatef(x, y, 0.0f);
+        rlRotatef(anim.currentAngle, 0, 0, 1);
+
+        // Note: isHovered is true here to maintain the "lifted" look during the spin
+        SubGridView(subgrids[anim.subgrid.r][anim.subgrid.c]).draw(0, 0, true, hoverStatus.cell, false, currentTurn);
+
+        rlPopMatrix();
     }
 }
 
@@ -70,6 +93,8 @@ void BoardView::startRotation(Point subgrid, bool clockwise) {
     anim.currentAngle = 0;
     anim.active = true;
     anim.clockwise = clockwise;
+
+    pending = { subgrid, clockwise, true };
 }
 
 HoverStatus BoardView::getHoverStatus() const {

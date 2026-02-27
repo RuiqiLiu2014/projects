@@ -17,14 +17,21 @@ struct RotationAnimation {
     bool clockwise = false;
 };
 
+struct PendingRotation {
+    Point subgrid = Point(-1, -1);
+    bool clockwise = false;
+    bool exists = false;
+};
+
 class BoardView {
     const Board& board;
     HoverStatus hoverStatus;
     RotationAnimation anim;
+    PendingRotation pending;
 
 public:
     explicit BoardView(const Board& board);
-    void update();
+    void update(Board& boardModel);
     void draw(CellStatus currentTurn, TurnPhase currentPhase) const;
     void startRotation(Point subgrid, bool clockwise);
     [[nodiscard]] bool isAnimating() const;

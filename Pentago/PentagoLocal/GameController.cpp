@@ -76,7 +76,7 @@ void GameController::update() {
         if (winner != CellStatus::EMPTY) {
             state = AppState::GAME_OVER;
         }
-        boardView->update();
+        boardView->update(*board);
     }
 }
 
@@ -97,6 +97,7 @@ void GameController::display() {
 }
 
 void GameController::handleClick() const {
+    if (boardView->isAnimating()) return;
     switch (turn->turnPhase()) {
         case TurnPhase::Placing:
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -110,11 +111,9 @@ void GameController::handleClick() const {
         case TurnPhase::Rotating:
             if (HoverStatus hover = boardView->getHoverStatus(); hover.active) {
                 if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    board->rotate(hover.subgrid, false);
                     boardView->startRotation(hover.subgrid, false);
                     turn->next();
                 } else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-                    board->rotate(hover.subgrid, true);
                     boardView->startRotation(hover.subgrid, true);
                     turn->next();
                 }
