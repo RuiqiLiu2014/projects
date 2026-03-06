@@ -8,7 +8,7 @@
 struct Point {
     int r, c;
 
-    bool inBounds() const {
+    [[nodiscard]] bool inBounds() const {
         return r >= 0 && r < 6 && c >= 0 && c < 6;
     }
 };

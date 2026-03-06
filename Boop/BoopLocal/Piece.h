@@ -13,4 +13,10 @@ enum class Piece {
     P1_CAT
 };
 
+inline int getOwner(Piece p) {
+    if (p == Piece::P0_CAT || p == Piece::P0_KITTEN) return 0;
+    if (p == Piece::P1_CAT || p == Piece::P1_KITTEN) return 1;
+    return -1;
+}
+
 #endif //BOOPLOCAL_PIECE_H
